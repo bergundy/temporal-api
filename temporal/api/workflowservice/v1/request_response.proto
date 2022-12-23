@@ -54,6 +54,7 @@ import "temporal/api/schedule/v1/message.proto";
 import "temporal/api/taskqueue/v1/message.proto";
 import "temporal/api/version/v1/message.proto";
 import "temporal/api/batch/v1/message.proto";
+import "temporal/api/nexusservice/v1/request_response.proto";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
@@ -1165,4 +1166,24 @@ message ListBatchOperationsResponse {
     // BatchOperationInfo contains the basic info about batch operation
     repeated temporal.api.batch.v1.BatchOperationInfo operation_info = 1;
     bytes next_page_token = 2;
+}
+
+message PollNexusTaskQueueRequest {
+    string namespace = 1;
+    string identity = 2;
+}
+
+message PollNexusTaskQueueResponse {
+    bytes task_token = 1;
+    temporal.api.nexusservice.v1.Message message = 2;
+}
+
+message RespondNexusTaskCompletedRequest {
+    string namespace = 1;
+    string identity = 2;
+    bytes task_token = 3;
+    temporal.api.nexusservice.v1.Message message = 4;
+}
+
+message RespondNexusTaskCompletedResponse {
 }
