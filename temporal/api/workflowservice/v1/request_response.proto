@@ -1174,14 +1174,14 @@ message PollNexusTaskQueueRequest {
 }
 
 message PollNexusTaskQueueResponse {
-    bytes task_token = 1;
+    string task_id = 1;
     temporal.api.nexusservice.v1.Message message = 2;
 }
 
 message RespondNexusTaskCompletedRequest {
     string namespace = 1;
     string identity = 2;
-    bytes task_token = 3;
+    string task_id = 3;
     temporal.api.nexusservice.v1.Message message = 4;
 }
 
