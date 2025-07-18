@@ -20,6 +20,7 @@ message Failure {
     map<string, string> metadata = 2;
     // UTF-8 encoded JSON serializable details.
     bytes details = 3;
+    Failure cause = 4;
 }
 
 message HandlerError {
