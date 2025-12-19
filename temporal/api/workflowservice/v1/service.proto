@@ -12,6 +12,7 @@ option csharp_namespace = "Temporalio.Api.WorkflowService.V1";
 
 import "temporal/api/workflowservice/v1/request_response.proto";
 import "google/api/annotations.proto";
+import "nexusannotations/v1/options.proto";
 
 // WorkflowService API defines how Temporal SDKs and other clients interact with the Temporal server
 // to create and interact with workflows and activities.
@@ -25,7 +26,6 @@ import "google/api/annotations.proto";
 // For each activity task, the worker is expected to execute the user's code which implements that
 // activity, responding with completion or failure.
 service WorkflowService {
-
     // RegisterNamespace creates a new namespace which can be used as a container for all resources.
     //
     // A Namespace is a top level entity within Temporal, and is used as a container for resources
@@ -385,6 +385,8 @@ service WorkflowService {
     // (-- api-linter: core::0136::prepositions=disabled
     //     aip.dev/not-precedent: "With" is used to indicate combined operation. --)
     rpc SignalWithStartWorkflowExecution (SignalWithStartWorkflowExecutionRequest) returns (SignalWithStartWorkflowExecutionResponse) {
+        option (nexus.v1.operation).tags = "exposed";
+
         option (google.api.http) = {
             post: "/namespaces/{namespace}/workflows/{workflow_id}/signal-with-start/{signal_name}"
             body: "*"
