@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package temporal.api.enums.v1;
+
+option go_package = "go.temporal.io/api/enums/v1;enums";
+option java_package = "io.temporal.api.enums.v1";
+option java_multiple_files = true;
+option java_outer_classname = "UpdatableTimerProto";
+option ruby_package = "Temporalio::Api::Enums::V1";
+option csharp_namespace = "Temporalio.Api.Enums.V1";
+
+// Status of an updatable timer execution.
+// (-- api-linter: core::0216::synonyms=disabled
+//     aip.dev/not-precedent: Named consistently with WorkflowExecutionStatus. --)
+enum UpdatableTimerExecutionStatus {
+    UPDATABLE_TIMER_EXECUTION_STATUS_UNSPECIFIED = 0;
+
+    // The timer is active and has not yet fired or been terminated.
+    UPDATABLE_TIMER_EXECUTION_STATUS_RUNNING = 1;
+
+    // The timer reached its deadline and fired.
+    UPDATABLE_TIMER_EXECUTION_STATUS_FIRED = 2;
+
+    // The timer was terminated before reaching its deadline.
+    UPDATABLE_TIMER_EXECUTION_STATUS_TERMINATED = 3;
+}
