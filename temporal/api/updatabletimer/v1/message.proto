@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package temporal.api.updatabletimer.v1;
+
+option go_package = "go.temporal.io/api/updatabletimer/v1;updatabletimer";
+option java_package = "io.temporal.api.updatabletimer.v1";
+option java_multiple_files = true;
+option java_outer_classname = "MessageProto";
+option ruby_package = "Temporalio::Api::UpdatableTimer::V1";
+option csharp_namespace = "Temporalio.Api.UpdatableTimer.V1";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+import "temporal/api/common/v1/message.proto";
+import "temporal/api/enums/v1/updatable_timer.proto";
+import "temporal/api/failure/v1/message.proto";
+
+// The outcome of a completed updatable timer execution.
+message UpdatableTimerExecutionOutcome {
+    oneof value {
+        // The timer reached its deadline and fired normally.
+        google.protobuf.Empty fired = 1;
+        // The timer was terminated prematurely.
+        temporal.api.failure.v1.Failure failure = 2;
+    }
+}
+
+// Information about an updatable timer execution.
+message UpdatableTimerExecutionInfo {
+    // Unique identifier of this timer within its namespace.
+    string timer_id = 1;
+    // Run ID of this timer execution.
+    string run_id = 2;
+
+    // Current status of the timer.
+    temporal.api.enums.v1.UpdatableTimerExecutionStatus status = 3;
+
+    // The current deadline. Updated when the timer is updated via UpdateUpdatableTimerExecution.
+    google.protobuf.Timestamp deadline = 4;
+    // The original deadline set when the timer was started.
+    google.protobuf.Timestamp original_deadline = 5;
+
+    // Time the timer was created via StartUpdatableTimerExecution.
+    google.protobuf.Timestamp create_time = 6;
+    // Time the timer reached a terminal status (fired or terminated). Null if still running.
+    google.protobuf.Timestamp close_time = 7;
+
+    // Search attributes for indexing.
+    temporal.api.common.v1.SearchAttributes search_attributes = 8;
+}
+
+// Limited timer information returned in list responses.
+message UpdatableTimerExecutionListInfo {
+    // Unique identifier of this timer within its namespace.
+    string timer_id = 1;
+    // Run ID of this timer execution.
+    string run_id = 2;
+
+    // Current status of the timer.
+    temporal.api.enums.v1.UpdatableTimerExecutionStatus status = 3;
+
+    // The current deadline.
+    google.protobuf.Timestamp deadline = 4;
+    // Time the timer was created.
+    google.protobuf.Timestamp create_time = 5;
+    // Time the timer reached a terminal status. Null if still running.
+    google.protobuf.Timestamp close_time = 6;
+
+    // Search attributes.
+    temporal.api.common.v1.SearchAttributes search_attributes = 7;
+}
