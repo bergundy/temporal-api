@@ -21,6 +21,8 @@ import "temporal/api/enums/v1/deployment.proto";
 import "temporal/api/enums/v1/update.proto";
 import "temporal/api/enums/v1/activity.proto";
 import "temporal/api/activity/v1/message.proto";
+import "temporal/api/enums/v1/updatable_timer.proto";
+import "temporal/api/updatabletimer/v1/message.proto";
 import "temporal/api/common/v1/message.proto";
 import "temporal/api/history/v1/message.proto";
 import "temporal/api/workflow/v1/message.proto";
@@ -3071,4 +3073,122 @@ message DeleteActivityExecutionRequest {
 }
 
 message DeleteActivityExecutionResponse {
+}
+
+// ==================== UpdatableTimer Execution ====================
+
+message StartUpdatableTimerExecutionRequest {
+    string namespace = 1;
+    // The identity of the client who initiated this request.
+    string identity = 2;
+    // A unique identifier for this start request. Typically UUIDv4.
+    string request_id = 3;
+
+    // Identifier for this timer. Required. Must be unique among updatable timers in the same
+    // namespace.
+    string timer_id = 4;
+
+    // The deadline for the timer. Required. The timer will fire when this time is reached.
+    google.protobuf.Timestamp deadline = 5;
+
+    // Search attributes for indexing.
+    temporal.api.common.v1.SearchAttributes search_attributes = 6;
+}
+
+message StartUpdatableTimerExecutionResponse {
+    // The run ID of the timer that was started.
+    string run_id = 1;
+}
+
+message UpdateUpdatableTimerExecutionRequest {
+    string namespace = 1;
+    // Identifier for this timer. Required.
+    string timer_id = 2;
+    // Timer run ID. If empty the request targets the latest run.
+    string run_id = 3;
+    // The identity of the client who initiated this request.
+    string identity = 4;
+    // A unique identifier for this update request. Typically UUIDv4.
+    string request_id = 5;
+
+    // The new deadline for the timer. Required. Replaces the current deadline.
+    google.protobuf.Timestamp deadline = 6;
+}
+
+message UpdateUpdatableTimerExecutionResponse {
+}
+
+message DescribeUpdatableTimerExecutionRequest {
+    string namespace = 1;
+    // Identifier for this timer. Required.
+    string timer_id = 2;
+    // Timer run ID. If empty the request targets the latest run.
+    string run_id = 3;
+    // Token from a previous DescribeUpdatableTimerExecutionResponse. If present, long-poll until
+    // timer state changes from the state encoded in this token. If absent, return current state
+    // immediately. If present, run_id must also be present.
+    bytes long_poll_token = 4;
+}
+
+message DescribeUpdatableTimerExecutionResponse {
+    // The run ID of the timer, useful when run_id was not specified in the request.
+    string run_id = 1;
+
+    // Information about the updatable timer execution.
+    temporal.api.updatabletimer.v1.UpdatableTimerExecutionInfo info = 2;
+
+    // Only set if the timer has completed (fired or terminated).
+    temporal.api.updatabletimer.v1.UpdatableTimerExecutionOutcome outcome = 3;
+
+    // Token for follow-on long-poll requests. Absent only if the timer has completed.
+    bytes long_poll_token = 4;
+}
+
+message PollUpdatableTimerExecutionRequest {
+    string namespace = 1;
+    // Identifier for this timer. Required.
+    string timer_id = 2;
+    // Timer run ID. If empty the request targets the latest run.
+    string run_id = 3;
+}
+
+message PollUpdatableTimerExecutionResponse {
+    // The run ID of the timer, useful when run_id was not specified in the request.
+    string run_id = 1;
+
+    // The outcome of the timer execution.
+    temporal.api.updatabletimer.v1.UpdatableTimerExecutionOutcome outcome = 2;
+}
+
+message TerminateUpdatableTimerExecutionRequest {
+    string namespace = 1;
+    // Identifier for this timer. Required.
+    string timer_id = 2;
+    // Timer run ID, targets the latest run if run_id is empty.
+    string run_id = 3;
+    // The identity of the worker/client.
+    string identity = 4;
+    // Used to de-dupe termination requests.
+    string request_id = 5;
+    // Reason for the termination, recorded in the timer's failure outcome.
+    string reason = 6;
+}
+
+message TerminateUpdatableTimerExecutionResponse {
+}
+
+message ListUpdatableTimerExecutionsRequest {
+    string namespace = 1;
+    // Max number of executions to return per page.
+    int32 page_size = 2;
+    // Token returned in a previous ListUpdatableTimerExecutionsResponse.
+    bytes next_page_token = 3;
+    // Visibility query, see https://docs.temporal.io/list-filter for the syntax.
+    string query = 4;
+}
+
+message ListUpdatableTimerExecutionsResponse {
+    repeated temporal.api.updatabletimer.v1.UpdatableTimerExecutionListInfo executions = 1;
+    // Token to use to fetch the next page. If empty, there is no next page.
+    bytes next_page_token = 2;
 }
