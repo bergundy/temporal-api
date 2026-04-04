@@ -1760,4 +1760,77 @@ service WorkflowService {
     // (-- api-linter: core::0127::http-annotation=disabled
     //     aip.dev/not-precedent: Activity deletion not exposed to HTTP, users should use cancel or terminate. --)
     rpc DeleteActivityExecution (DeleteActivityExecutionRequest) returns (DeleteActivityExecutionResponse) {}
+
+    // StartUpdatableTimerExecution creates a new updatable timer with the given deadline.
+    //
+    // The timer will fire when the deadline is reached. The deadline can be updated via
+    // UpdateUpdatableTimerExecution.
+    rpc StartUpdatableTimerExecution (StartUpdatableTimerExecutionRequest) returns (StartUpdatableTimerExecutionResponse) {
+        option (google.api.http) = {
+            post: "/namespaces/{namespace}/updatable-timers/{timer_id}"
+            body: "*"
+            additional_bindings {
+                post: "/api/v1/namespaces/{namespace}/updatable-timers/{timer_id}"
+                body: "*"
+            }
+        };
+    }
+
+    // UpdateUpdatableTimerExecution updates the deadline of a running updatable timer.
+    rpc UpdateUpdatableTimerExecution (UpdateUpdatableTimerExecutionRequest) returns (UpdateUpdatableTimerExecutionResponse) {
+        option (google.api.http) = {
+            post: "/namespaces/{namespace}/updatable-timers/{timer_id}/update"
+            body: "*"
+            additional_bindings {
+                post: "/api/v1/namespaces/{namespace}/updatable-timers/{timer_id}/update"
+                body: "*"
+            }
+        };
+    }
+
+    // DescribeUpdatableTimerExecution returns information about an updatable timer execution.
+    // It can be used to:
+    // - Get current timer info without waiting
+    // - Long-poll for next state change and return new timer info
+    rpc DescribeUpdatableTimerExecution (DescribeUpdatableTimerExecutionRequest) returns (DescribeUpdatableTimerExecutionResponse) {
+        option (google.api.http) = {
+            get: "/namespaces/{namespace}/updatable-timers/{timer_id}"
+            additional_bindings {
+                get: "/api/v1/namespaces/{namespace}/updatable-timers/{timer_id}"
+            }
+        };
+    }
+
+    // PollUpdatableTimerExecution long-polls for an updatable timer to complete and returns the
+    // outcome (fired or failure).
+    rpc PollUpdatableTimerExecution (PollUpdatableTimerExecutionRequest) returns (PollUpdatableTimerExecutionResponse) {
+        option (google.api.http) = {
+            get: "/namespaces/{namespace}/updatable-timers/{timer_id}/outcome"
+            additional_bindings {
+                get: "/api/v1/namespaces/{namespace}/updatable-timers/{timer_id}/outcome"
+            }
+        };
+    }
+
+    // TerminateUpdatableTimerExecution terminates an existing updatable timer immediately.
+    rpc TerminateUpdatableTimerExecution (TerminateUpdatableTimerExecutionRequest) returns (TerminateUpdatableTimerExecutionResponse) {
+        option (google.api.http) = {
+            post: "/namespaces/{namespace}/updatable-timers/{timer_id}/terminate"
+            body: "*"
+            additional_bindings {
+                post: "/api/v1/namespaces/{namespace}/updatable-timers/{timer_id}/terminate"
+                body: "*"
+            }
+        };
+    }
+
+    // ListUpdatableTimerExecutions returns a list of updatable timer executions matching a query.
+    rpc ListUpdatableTimerExecutions (ListUpdatableTimerExecutionsRequest) returns (ListUpdatableTimerExecutionsResponse) {
+        option (google.api.http) = {
+            get: "/namespaces/{namespace}/updatable-timers"
+            additional_bindings {
+                get: "/api/v1/namespaces/{namespace}/updatable-timers"
+            }
+        };
+    }
 }
