@@ -21,7 +21,6 @@ import "temporal/api/enums/v1/deployment.proto";
 import "temporal/api/enums/v1/update.proto";
 import "temporal/api/enums/v1/activity.proto";
 import "temporal/api/activity/v1/message.proto";
-import "temporal/api/enums/v1/updatable_timer.proto";
 import "temporal/api/updatabletimer/v1/message.proto";
 import "temporal/api/common/v1/message.proto";
 import "temporal/api/history/v1/message.proto";
