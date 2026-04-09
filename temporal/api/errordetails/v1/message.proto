@@ -129,3 +129,10 @@ message ActivityExecutionAlreadyStartedFailure {
     string start_request_id = 1;
     string run_id = 2;
 }
+
+// An error indicating that an updatable timer execution failed to start. Returned when there is an existing timer with
+// the given timer ID, and the conflict policy does not permit starting a new one.
+message UpdatableTimerExecutionAlreadyStartedFailure {
+    string start_request_id = 1;
+    string run_id = 2;
+}
